@@ -1,0 +1,147 @@
+% SEM图LaTeX模板
+% 使用方法: 将此模板复制到你的LaTeX文档中，根据需要修改
+
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows.meta, positioning}
+\usepackage{amsmath}
+
+% 页面设置
+\usepackage[margin=1in]{geometry}
+
+% 中文支持（如需要）
+% \usepackage{ctex}
+
+\begin{document}
+
+% ============================================================================
+% TikZ样式定义
+% ============================================================================
+
+\tikzstyle{latent} = [ellipse, draw, minimum width=2cm, minimum height=1cm]
+\tikzstyle{manifest} = [rectangle, draw, minimum width=1.5cm, minimum height=0.8cm]
+\tikzstyle{error} = [circle, draw, minimum size=0.6cm]
+\tikzstyle{const} = [triangle, draw, minimum size=0.6cm]
+\tikzstyle{reg} = [->, >=stealth]
+\tikzstyle{cov} = [<->, >=stealth]
+\tikzstyle{fixed} = [->, >=stealth, dashed]
+
+% ============================================================================
+% 在此处插入你的SEM图代码
+% ============================================================================
+
+% 示例：单因子CFA
+\section*{单因子CFA模型}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+  % 潜变量
+  \node[latent] (F1) at (0,2) {$F_1$};
+  
+  % 观测变量
+  \node[manifest] (y1) at (-2,0) {$y_1$};
+  \node[manifest] (y2) at (0,0) {$y_2$};
+  \node[manifest] (y3) at (2,0) {$y_3$};
+  
+  % 误差项
+  \node[error] (e1) at (-2,-1) {$\varepsilon_1$};
+  \node[error] (e2) at (0,-1) {$\varepsilon_2$};
+  \node[error] (e3) at (2,-1) {$\varepsilon_3$};
+  
+  % 路径
+  \draw[reg] (F1) -- (y1);
+  \draw[reg] (F1) -- (y2);
+  \draw[reg] (F1) -- (y3);
+  
+  \draw[reg] (e1) -- (y1);
+  \draw[reg] (e2) -- (y2);
+  \draw[reg] (e3) -- (y3);
+\end{tikzpicture}
+\caption{单因子CFA模型}
+\end{figure}
+
+% ============================================================================
+% 更多示例模板
+% ============================================================================
+
+% 示例：中介模型
+\section*{中介模型}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+  \node[latent] (X) at (0,1) {$X$};
+  \node[latent] (M) at (3,1) {$M$};
+  \node[latent] (Y) at (6,1) {$Y$};
+  
+  \draw[reg] (X) -- node[above] {$a$} (M);
+  \draw[reg] (M) -- node[above] {$b$} (Y);
+  \draw[reg, bend left] (X) to node[above] {$c'$} (Y);
+\end{tikzpicture}
+\caption{中介模型}
+\end{figure}
+
+% 示例：交叉滞后模型（CLPM）
+\section*{交叉滞后模型}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+  % T1
+  \node[latent] (X1) at (0,2) {$X_1$};
+  \node[latent] (Y1) at (3,2) {$Y_1$};
+  
+  % T2
+  \node[latent] (X2) at (0,0) {$X_2$};
+  \node[latent] (Y2) at (3,0) {$Y_2$};
+  
+  % 自回归
+  \draw[reg] (X1) -- (X2);
+  \draw[reg] (Y1) -- (Y2);
+  
+  % 交叉滞后
+  \draw[reg] (X1) -- (Y2);
+  \draw[reg] (Y1) -- (X2);
+  
+  % 同期相关
+  \draw[cov] (X1) -- (Y1);
+  \draw[cov] (X2) -- (Y2);
+\end{tikzpicture}
+\caption{交叉滞后模型（CLPM）}
+\end{figure}
+
+% 示例：潜增长模型（LGCM）
+\section*{潜增长模型}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+  % 潜因子
+  \node[latent] (i) at (0,2) {$i$};
+  \node[latent] (s) at (3,2) {$s$};
+  
+  % 观测变量
+  \node[manifest] (y1) at (0,0) {$y_1$};
+  \node[manifest] (y2) at (1,0) {$y_2$};
+  \node[manifest] (y3) at (2,0) {$y_3$};
+  \node[manifest] (y4) at (3,0) {$y_4$};
+  
+  % 载荷
+  \draw[reg] (i) -- node[left] {$1$} (y1);
+  \draw[reg] (i) -- (y2);
+  \draw[reg] (i) -- (y3);
+  \draw[reg] (i) -- (y4);
+  
+  \draw[reg] (s) -- node[left] {$0$} (y1);
+  \draw[reg] (s) -- node[left] {$1$} (y2);
+  \draw[reg] (s) -- node[left] {$2$} (y3);
+  \draw[reg] (s) -- node[left] {$3$} (y4);
+  
+  % 协方差
+  \draw[cov] (i) -- (s);
+\end{tikzpicture}
+\caption{潜增长模型（LGCM）}
+\end{figure}
+
+\end{document}
